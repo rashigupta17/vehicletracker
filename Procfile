@@ -1,1 +1,1 @@
-web:gunicorn vehicletracker.wsgi
+web: gunicorn vehicletracker.wsgi.py
