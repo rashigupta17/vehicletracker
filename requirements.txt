@@ -17,5 +17,5 @@ zappa==0.51.0
 sendgrid==6.4.4
 django-cors-headers==3.4.0
 twilio==6.46.0
-psycopg2
+psycopg2==2.8.6
 psycopg2-binary==2.8.6
