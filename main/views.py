@@ -73,7 +73,7 @@ class LoginUser(TokenObtainPairView):
             return Response(responsedata(False, "Password is required"), status=status.HTTP_400_BAD_REQUEST)
 
         if not User.objects.filter(email=request.data.get('email')).exists():
-            return Response(responsedata(False, "No User found"), status=status.HTTP_404_NOT_FOUND)
+            return Response(responsedata(False, "No user found"), status=status.HTTP_400_BAD_REQUEST)
         
         if not User.objects.get(email=request.data.get('email')).check_password(request.data.get("password")):
             return Response(responsedata(False, "Incorrect Password"), status=status.HTTP_400_BAD_REQUEST)
@@ -96,7 +96,7 @@ class ForgetPasswordOTP(APIView):
     def post(self, request):
         if request.data.get('mobile'):
             if not User.objects.filter(mobile=request.data.get("mobile")).exists():
-                return Response(responsedata(False, "No User found with this Mobile Number"), status=status.HTTP_404_NOT_FOUND)
+                return Response(responsedata(False, "No user  found"), status=status.HTTP_400_BAD_REQUEST)
             user =User.objects.filter(mobile=request.data.get("mobile")).values().first()
             number = str(randint(1000, 9999))
 
@@ -133,7 +133,7 @@ class ForgetPasswordOTPValidation(APIView):
                 except:
                     return Response(responsedata(False, "Something Went Wrong"), status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(responsedata(False, "OTP not provided"), status=status.HTTP_404_NOT_FOUND)
+            return Response(responsedata(False, "Otp not provided"), status=status.HTTP_400_BAD_REQUEST)
 
 class ForgetPasswordChange(APIView):
 
@@ -194,7 +194,7 @@ class ValidateOtp(APIView):
                 except:
                     return Response(responsedata(False, "Something Went Wrong"), status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(responsedata(False, "OTP not provided"), status=status.HTTP_404_NOT_FOUND)
+            return Response(responsedata(False, "OTP not provided"), status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfile(DetailsAPI):

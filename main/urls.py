@@ -26,4 +26,15 @@ urlpatterns = [
     path('rudorder/<pk>',views.OrderCrud.as_view()),
     path('ruddelivery/<pk>',views.DeliveryCrud.as_view()),
 
+    path('AgencyDetialsList',views.AgencyDetialsList.as_view()),
+    path('DealerDetialsList',views.DealerDetialsList.as_view()),
+    path('DriverDetailsList',views.DriverDetailsList.as_view()),
+    path('DriversList',views.DriversList.as_view()),
+    path('OrderList',views.OrderList.as_view()),
+    path('DeliveryList',views.DeliveryList.as_view()),
+    path('VehiclesList',views.VehiclesList.as_view()),
+
+
+
+
 ]

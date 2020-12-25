@@ -142,32 +142,47 @@ class CreateAttribute(APIView):
 
 
 
-def pagination(paginator,pagenumber):
-    if int(pagenumber) > paginator.num_pages:
-            raise ValidationError("Not enough pages", code=404)
-    try:
-        previous_page_number = paginator.page(pagenumber).previous_page_number()
-    except EmptyPage:
-        previous_page_number = None
-    try:
-        next_page_number = paginator.page(pagenumber).next_page_number()
-    except EmptyPage:
-        next_page_number = None
-    data_to_show = paginator.page(pagenumber).object_list
+class PaginationList(APIView):
+    """
+    A Base API class for listing attributes based on user
+    """
+    model_class = None
+    serializer_class = None
+    instance_name = None
+    permission_classes = None
 
-    data = {'pagination': {
-        'previous_page': previous_page_number,
-        'is_previous_page': paginator.page(pagenumber).has_previous(),
-        'next_page': next_page_number,
-        'is_next_page': paginator.page(pagenumber).has_next(),
-        'start_index': paginator.page(pagenumber).start_index(),
-        'end_index': paginator.page(pagenumber).end_index(),
-        'total_entries': paginator.count,
-        'total_pages': paginator.num_pages,
-        'page': int(pagenumber)
-    }, 'results': data_to_show}
+    def get(self, request, format=None):
+        
+        try:
+            activity_list = self.model_class.objects.all().order_by('-id').values()
+            pagenumber = request.GET.get('page', 1)
+            record_num = request.GET.get('records',10)
+            if record_num == 10:
+                paginator = Paginator(activity_list, 10)
+                data = pagination(paginator, pagenumber)
+            elif record_num == 25:
+                paginator = Paginator(activity_list, 25)
+                data = pagination(paginator, pagenumber)
+            elif record_num == 50:
+                paginator = Paginator(activity_list, 50)
+                data = pagination(paginator, pagenumber)
+            elif record_num == 100:
+                paginator = Paginator(activity_list, 100)
+                data = pagination(paginator, pagenumber)
+            response_data = {
+                'status': False,
+                'message': 'data retreived',
+                'data': data
+            }
+            return Response(response_data)
 
-    return data
+        except:
+            response_data = {
+                'status': False,
+                'message': 'error in user key',
+                'data': {}
+            }
+            return Response(response_data)
 
 class PaginationList(APIView):
     """
